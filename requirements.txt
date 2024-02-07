@@ -1,0 +1,5 @@
+nltk
+spacy
+python-docx
+PyPDF2
+beautifulsoup4
