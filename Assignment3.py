@@ -1,8 +1,5 @@
-from Assignment2 import filtered_tokens
 import numpy as np
 import math as Math
-
-print(filtered_tokens)
 
 def editDistance(str1, str2):
     dp = [[0] * (len(str1)+1) for _ in range(len(str2) +1) ]
@@ -19,10 +16,13 @@ def editDistance(str1, str2):
                 dp[i][j] = min(1+dp[i-1][j],1+dp[i][j-1],2+dp[i-1][j-1])
     return dp[len(str2)][len(str1)]
 
+inputText = "hallo"
 
-inputText = input("Enter any Word")
+dictionary = dict()
+with open('corpus.txt','r') as f:   
+    words = f.read().split('\n')
+for word in words:
+    dictionary[word] = editDistance(word,inputText)
 
-dict = dict()
-for word in filtered_tokens:
-    dict[word] = editDistance(word,inputText)
-print(dict)
+dis = sorted(dictionary.items(),key=lambda i:i[1])
+print(dis[:3])

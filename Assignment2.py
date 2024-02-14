@@ -2,10 +2,11 @@ import nltk
 import string
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-from nltk.stem import SnowballStemmer
+from nltk.stem import SnowballStemmer,WordNetLemmatizer
 import spacy
 # nltk.download('punkt')
 # nltk.download('stopwords')
+# nltk.download('wordnet')
 
 # Load the spacy model
 nlp = spacy.load("en_core_web_sm")
@@ -71,7 +72,7 @@ def calculateTTR(tokens):
 # Creating corpus from Text File
 def createCorpusFromText():
     # Load the text from the doc file
-    with open("document.txt") as file:
+    with open("corpus.txt") as file:
         text = file.read()
     return text
 
@@ -118,29 +119,63 @@ def createCorpusFromWebsite():
     text = soup.get_text()
     return text
 
-print("Select one option from below to create a Corpus \n 1.Text \n 2.Docx \n 3.PDF \n 4.Website")
-option = int(input())
-if(option == 1):
-    text = createCorpusFromText()
-elif(option == 2):
-    text = createCorpusFromDocx()
-elif(option == 3):
-    text = createCorpusFromPdf()
-else:
-    text = createCorpusFromWebsite()
+# print("Select one option from below to create a Corpus \n 1.Text \n 2.Docx \n 3.PDF \n 4.Website")
+# option = int(input())
+# if(option == 1):
+#     text = createCorpusFromText()
+# elif(option == 2):
+#     text = createCorpusFromDocx()
+# elif(option == 3):
+#     text = createCorpusFromPdf()
+# else:
+#     text = createCorpusFromWebsite()
     
 
-# Tokenize the text
-tokens = word_tokenize(text)
-# Perform stemming
-stemmed_tokens = stem(tokens)
-# Perform lemmatization
-lemmatized_tokens = lemmatize(tokens)
-# Remove stop words
-filtered_tokens = remove_stop_words(lemmatized_tokens)
-# Print the tokens
-print("Original Tokens:", tokens[:20])
-print("Stemmed Tokens:", stemmed_tokens[:20])
-print("Lemmatized Tokens:", lemmatized_tokens[:20])
-print("Filtered Tokens:", filtered_tokens[:20])
-print("TTR:", calculateTTR(filtered_tokens))
+def process_french_text(text):
+    original_tokens = word_tokenize(text)
+    stemmer = SnowballStemmer("french")
+    stemmed_tokens = [stemmer.stem(word) for word in original_tokens]
+
+    lemmatizer = WordNetLemmatizer()
+    lemmatized_tokens = [lemmatizer.lemmatize(word) for word in original_tokens]
+
+    stop_words = set(stopwords.words('french'))
+    filtered_tokens = [word for word in original_tokens if word.lower() not in stop_words]
+
+    return original_tokens, list(set(original_tokens)), len(set(original_tokens)) / len(
+        original_tokens), stemmed_tokens, lemmatized_tokens, filtered_tokens
+
+
+def print_results(result_tuple):
+    print(f"Original Tokens: {result_tuple[0][:20]}")
+    print(f"Unique Words: {result_tuple[1][:20]}")
+    print(f"TTR Value: {result_tuple[2]:.4f}")
+    print(f"Stemmed Tokens: {result_tuple[3][:20]}")
+    print(f"Lemmatized Tokens: {result_tuple[4][:20]}")
+    print(f"Filtered Tokens (without stop words): {result_tuple[5][:20]}")
+
+
+
+def useFrenchCorpus():
+    with open("document.txt") as file:
+        french_text = file.read()
+    result_tuple = process_french_text(french_text)
+    print_results(result_tuple)
+
+def useEnglishCorpus():
+    text = createCorpusFromText()
+    tokens = word_tokenize(text)
+    # Perform stemming
+    stemmed_tokens = stem(tokens)
+    # Perform lemmatization
+    lemmatized_tokens = lemmatize(tokens)
+    # Remove stop words
+    filtered_tokens = remove_stop_words(lemmatized_tokens)
+    # Print the tokens
+    print("Original Tokens:", tokens[:20])
+    print("Stemmed Tokens:", stemmed_tokens[:20])
+    print("Lemmatized Tokens:", lemmatized_tokens[:20])
+    print("Filtered Tokens:", filtered_tokens[:20])
+    print("TTR:", calculateTTR(filtered_tokens))
+
+useEnglishCorpus()
