@@ -20,11 +20,9 @@ y_pred = regressor.predict(x_test)
 print(f"R-Squared Score : {r2_score(y_test,y_pred)}")
 print(f"MSE : {mean_squared_error(y_test,y_pred)}")
 
-
 # Plot the linear model
-plt.scatter(x_train,y_train,color = 'red')
-plt.plot(x_test,regressor.predict(x_test),color='blue')
-plt.title('Features vs Price')
-plt.xlabel('Features')
-plt.ylabel('Price')
+plt.scatter(y_test, y_pred, color='red')
+plt.xlabel('Actual Prices')
+plt.ylabel('Predicted Prices')
+plt.title('Actual vs Predicted')
 plt.show()
