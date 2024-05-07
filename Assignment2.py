@@ -23,11 +23,11 @@ regressor.fit(x_train,y_train)
 y_pred = regressor.predict(x_test)
 
 # Find Accuracy Score
-print(r2_score(y_test,y_pred))
-print(mean_squared_error(y_test,y_pred))
+print(f"R-Squared Score : {r2_score(y_test,y_pred)}")
+print(f"MSE : {mean_squared_error(y_test,y_pred)}")
 
 # Plot the linear model
-plt.scatter(x_test,y_pred,color = 'red')
+plt.scatter(x_train,y_train,color = 'red')
 plt.plot(x_train,regressor.predict(x_train),color='blue')
 plt.title('Brain_Weight vs Body_Weight')
 plt.xlabel('Brain')
