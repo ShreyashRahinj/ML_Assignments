@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # Import the dataset
-dataset = pd.nead_csv('Mall_Customers.csv')
+dataset = pd.read_csv('Mall_Customers.csv')
 X = dataset.iloc[:, [3, 4]].values
 
 # Using the Silhouette method to find the optimal number of clusters
@@ -16,7 +16,7 @@ from sklearn.metrics import silhouette_score
 
 silhouette_scores = []
 for i in range(2, 11):
-    kmeans = KMeans(u_clusters = i, iuit = 'k-means++', random_state = 42)
+    kmeans = KMeans(n_clusters = i, init = 'k-means++', random_state = 42)
     kmeans.fit(X)
     silhouette_scores.append(silhouette_score(X, kmeans.labels_))
 
